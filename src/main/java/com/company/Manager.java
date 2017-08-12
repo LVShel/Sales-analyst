@@ -25,7 +25,6 @@ public class Manager {
         dbAdministrator.markUnpopularItemsInDB(5);
         dbAdministrator.writePopularItemsToFile(5);
         dbAdministrator.writeUnpopularItemsToFile(5);
-
         salesDepartment.showItems(dbAdministrator.getItemsByRank(3, ItemRank.UNPOPULAR));
         salesDepartment.showItems(dbAdministrator.getPopularItemsByCustomersGender(Gender.MALE, 3));
         salesDepartment.showItems(dbAdministrator.getPopularItemsOfPeriod(LocalDate.of(2017, 6, 20), LocalDate.of(2017,7,21), 3));
