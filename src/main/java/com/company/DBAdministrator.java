@@ -213,7 +213,7 @@ public class DBAdministrator {
                 connection.rollback();
             } catch (SQLException e1) {
                 System.out.println("Unable to rollback in method getItemsByRank()");
-                e1.printStackTrace();//todo exception is not handled properly!!
+                e1.printStackTrace();
             }
             return null;
         }
