@@ -25,26 +25,28 @@ public class SalesDepartment {
     private DBAdministrator admin = new DBAdministrator();
 
     public void initCustomers(){
-        initFromFile(new CustomerInitStrategy());
+        for(Object obj : initFromFile(new CustomerInitStrategy())){
+            customers.add((Customer)obj);
+        }
     }
 
     public void initItems(){
-        initFromFile(new ItemInitStrategy());
+        for(Object obj : initFromFile(new ItemInitStrategy())){
+            items.add((Item)obj);
+        }
     }
 
-    public void initFromFile(InitStrategy strategy){
+    public <T> List<T> initFromFile(InitStrategy<T> strategy){
+        List<T> list = new ArrayList<T>();
         try(CSVReader reader = new CSVReader(new FileReader(new File(strategy.getFileName())), ';', '"', 1)) {
             String[] parts;
             while ((parts = reader.readNext()) != null) {
-                if(strategy instanceof CustomerInitStrategy){
-                    customers.add((Customer)strategy.parseLine(parts));
-                }
-                if(strategy instanceof ItemInitStrategy){
-                    items.add((Item)strategy.parseLine(parts));
-                }
+                list.add(strategy.parseLine(parts));
             }
+            return list;
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
