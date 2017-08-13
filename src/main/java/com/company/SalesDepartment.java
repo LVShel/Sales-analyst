@@ -1,17 +1,15 @@
 package com.company;
 
-import com.company.utils.Gender;
+import com.company.utils.InitStrategy.CustomerInitStrategy;
+import com.company.utils.InitStrategy.InitStrategy;
+import com.company.utils.InitStrategy.ItemInitStrategy;
 import com.opencsv.CSVReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * This class represents Sales Department of the product store.
@@ -25,25 +23,25 @@ public class SalesDepartment {
     private List<Customer> customers = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
     private DBAdministrator admin = new DBAdministrator();
-    File customersFile = new File("src/Customers.csv");
-    File itemsFile = new File("src/items.csv");
 
     public void initCustomers(){
-        try(CSVReader reader = new CSVReader(new FileReader(customersFile), ';', '"', 1)) {
-            String[] parts;
-            while ((parts = reader.readNext()) != null) {
-                parseCustomerLine(parts);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        initFromFile(new CustomerInitStrategy());
     }
 
     public void initItems(){
-        try(CSVReader reader = new CSVReader(new FileReader(itemsFile), ';', '"', 1)) {
+        initFromFile(new ItemInitStrategy());
+    }
+
+    public void initFromFile(InitStrategy strategy){
+        try(CSVReader reader = new CSVReader(new FileReader(new File(strategy.getFileName())), ';', '"', 1)) {
             String[] parts;
             while ((parts = reader.readNext()) != null) {
-                parseItemLine(parts);
+                if(strategy instanceof CustomerInitStrategy){
+                    customers.add((Customer)strategy.parseLine(parts));
+                }
+                if(strategy instanceof ItemInitStrategy){
+                    items.add((Item)strategy.parseLine(parts));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,42 +57,6 @@ public class SalesDepartment {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    void parseCustomerLine(String[] parts) {
-        DateTimeFormatter oldFormat1 = DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.US);
-        DateTimeFormatter oldFormat2 = DateTimeFormatter.ofPattern("M/d/yyyy");
-        List<Integer> lastPurchases = new ArrayList<>();
-        String[] subParts = parts[5].replaceAll("\"", "").split(",");
-        for(int i = 0 ; i<subParts.length ; i++)
-            lastPurchases.add(Integer.parseInt(subParts[i]));
-        String name = parts[0];
-        LocalDate dateOfBirth = LocalDate.parse(parts[1], oldFormat1);
-        String address = parts[2].replaceAll("\"", "");
-        Gender gender = Gender.valueOf(parts[3].toUpperCase());
-        String phoneNumber = parts[4];
-        LocalDate dateOfLastPurchase = LocalDate.parse(parts[6], oldFormat2);
-        Customer customer = new Customer(name, gender);
-        customer.setDateOfBirth(dateOfBirth);
-        customer.setAddress(address);
-        customer.setPhoneNumber(phoneNumber);
-        customer.setDateOfLastPurchase(dateOfLastPurchase);
-        customer.setLastPurchases(lastPurchases);
-        customers.add(customer);
-    }
-
-    void parseItemLine(String[] parts) {
-        DateTimeFormatter oldFormat = DateTimeFormatter.ofPattern("d.M.yyyy H:mm:ss");
-        int id = Integer.valueOf(parts[0]);
-        String title = parts[1];
-        int code = Integer.valueOf(parts[2]);
-        String producer = parts[3];
-        LocalDateTime dateOfLastUpdate = LocalDateTime.parse(parts[4], oldFormat);
-        Item item = new Item(id, title);
-        item.setDateOfLastUpdate(dateOfLastUpdate);
-        item.setCode(code);
-        item.setProducer(producer);
-        items.add(item);
     }
 
     public void showItems(List<Item> items){
