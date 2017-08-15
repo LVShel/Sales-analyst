@@ -6,7 +6,9 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 /**
- * Created by Home on 11.08.2017.
+ * Class {@code PropertiesWriter} is a util tool for storing <>store</> database access properties in a separate
+ * config.properties file
+ * @author Leonid Shelest
  */
 public class PropertiesWriter {
     public static void write(){
@@ -17,7 +19,6 @@ public class PropertiesWriter {
             properties.setProperty("useSSL", "false");
             properties.setProperty("autoReconnect", "true");
             properties.store(output, null);
-
         } catch (IOException io) {
             io.printStackTrace();
         }
