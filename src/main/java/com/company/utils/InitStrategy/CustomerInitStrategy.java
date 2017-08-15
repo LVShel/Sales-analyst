@@ -37,8 +37,9 @@ public class CustomerInitStrategy implements InitStrategy<Customer> {
         DateTimeFormatter oldFormat2 = DateTimeFormatter.ofPattern("M/d/yyyy");
         List<Integer> lastPurchases = new ArrayList<>();
         String[] subParts = line[5].replaceAll("\"", "").split(",");
-        for(int i = 0 ; i<subParts.length ; i++)
+        for(int i = 0 ; i<subParts.length ; i++) {
             lastPurchases.add(Integer.parseInt(subParts[i]));
+        }
         String name = line[0];
         LocalDate dateOfBirth = LocalDate.parse(line[1], oldFormat1);
         String address = line[2].replaceAll("\"", "");
@@ -51,7 +52,6 @@ public class CustomerInitStrategy implements InitStrategy<Customer> {
         customer.setPhoneNumber(phoneNumber);
         customer.setDateOfLastPurchase(dateOfLastPurchase);
         customer.setLastPurchases(lastPurchases);
-
         return customer;
     }
 }
