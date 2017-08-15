@@ -1,10 +1,11 @@
 package com.company;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
- * Created by Home on 07.08.2017.
+ * Class {@code Item} is a specific type of sales objects
+ * This class is defined to store and retrieve information about concrete product of the store
+ * @author Leonid Shelest
  */
 public class Item {
     private int id;

@@ -1,12 +1,13 @@
 package com.company;
 
 import com.company.utils.Gender;
-
 import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Created by Home on 06.08.2017.
+ * Class {@code Customer} is a specific type of sales objects
+ * This class is defined to store and retrieve information about concrete customer of the store
+ * @author Leonid Shelest
  */
 public class Customer {
     private int id;
@@ -18,9 +19,6 @@ public class Customer {
     private List<Integer> lastPurchases;
     private LocalDate dateOfLastPurchase;
     private static int numberOfCustomers = 0;
-
-    public Customer() {
-    }
 
     public Customer(String name, Gender gender) {
         this.name = name;

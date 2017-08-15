@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Class {@code ItemInitStrategy} is a specific type of sales objects
+ * Class {@code ItemInitStrategy} is a specific strategy of sales object initialization
  * This class is able to retrieve information about item from related CSV file and initialize this item
  * as an object
  * @see com.company.utils.InitStrategy.InitStrategy
@@ -39,7 +39,6 @@ public class ItemInitStrategy implements InitStrategy<Item> {
         item.setDateOfLastUpdate(dateOfLastUpdate);
         item.setCode(code);
         item.setProducer(producer);
-
         return item;
     }
 }

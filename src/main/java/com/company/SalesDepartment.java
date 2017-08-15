@@ -51,14 +51,10 @@ public class SalesDepartment {
     }
 
     public void refreshStoreTables(){
-        try {
-            admin.recreateAllTables();
-            admin.insertCustomersToDB(getCustomers());
-            admin.insertItemsToDB(getItems());
-            admin.insertSalesToDB(getCustomers());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        admin.recreateAllTables();
+        admin.insertCustomersToDB(getCustomers());
+        admin.insertItemsToDB(getItems());
+        admin.insertSalesToDB(getCustomers());
     }
 
     public void showItems(List<Item> items){

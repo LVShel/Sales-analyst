@@ -1,7 +1,5 @@
 package com.company.utils;
 
-
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,7 +10,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * Created by Home on 07.08.2017.
+ * Class {@code DBConnector} is a specific type database connection service
+ * @author Leonid Shelest
  */
 public class DBConnector {
     private final String URL = "jdbc:mysql://localhost:3306/store";

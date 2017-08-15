@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Class {@code CustomerInitStrategy} is a specific type of sales objects
+ * Class {@code CustomerInitStrategy} is a specific strategy of sales object initialization
  * This class is able to retrieve customer's data from related CSV file and initialize a customer
  * as an object
  * @see com.company.utils.InitStrategy.InitStrategy

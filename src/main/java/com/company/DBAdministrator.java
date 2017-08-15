@@ -6,14 +6,15 @@ import com.company.utils.ItemRank;
 import com.opencsv.CSVWriter;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class represents the store database administrator.
- * It has all queries (constants) which are necessary to present proper information about customers products
+ * This class represents the store database administrator functionality
+ * It has all queries (constants) which are necessary to present proper information about customers, products
  * and sales on manager's or sales department requests. This class is responsible for database maintaining.
  * @author  Leonid Shelest
  */
@@ -132,7 +133,7 @@ public class DBAdministrator {
         }
     }
 
-    public void insertItemsToDB(List<Item> items) throws SQLException {
+    public void insertItemsToDB(List<Item> items) {
         connection = connector.getConnection();
         try (PreparedStatement preparedStmt = connection.prepareStatement(INSERT_ITEMS)) {
             connection.setAutoCommit(false);
@@ -151,7 +152,11 @@ public class DBAdministrator {
         } catch (SQLException e) {
             e.printStackTrace();
             if (connection != null) {
-                connection.rollback();
+                try {
+                    connection.rollback();
+                } catch (SQLException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }
@@ -209,12 +214,6 @@ public class DBAdministrator {
         } catch (SQLException e) {
             System.out.println("Problem in method getItemsByRank()");
             e.printStackTrace();
-            if (connection != null) try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.out.println("Unable to rollback in method getItemsByRank()");
-                e1.printStackTrace();
-            }
             return null;
         }
     }
@@ -233,12 +232,6 @@ public class DBAdministrator {
         } catch (SQLException e) {
             System.out.println("Problem in method getPopularItemsByCustomersGender()");
             e.printStackTrace();
-            if (connection != null) try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                System.out.println("Unable to rollback in method getPopularItemsByCustomersGender()");
-                e1.printStackTrace();
-            }
             return null;
         }
 
@@ -259,14 +252,6 @@ public class DBAdministrator {
         } catch (SQLException e) {
             System.out.println("Problem in method getPopularItemsOfPeriod()");
             e.printStackTrace();
-            if (connection != null) {
-                try {
-                    connection.rollback();
-                } catch (SQLException e1) {
-                    System.out.println("Unable to rollback in method getPopularItemsOfPeriod()");
-                    e1.printStackTrace();
-                }
-            }
             return null;
         }
     }
@@ -324,8 +309,8 @@ public class DBAdministrator {
             stmt.setInt(1, limit);
             ResultSet rs = stmt.executeQuery();
             csvWriter.writeAll(rs, true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -336,8 +321,8 @@ public class DBAdministrator {
             stmt.setInt(1, limit);
             ResultSet rs = stmt.executeQuery();
             csvWriter.writeAll(rs, true);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
         }
     }
 
