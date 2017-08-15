@@ -16,13 +16,13 @@ public class ItemInitStrategy implements InitStrategy<Item> {
     }
 
     @Override
-    public Item parseLine(String[] parts) {
+    public Item parseLine(String[] line) {
         DateTimeFormatter oldFormat = DateTimeFormatter.ofPattern("d.M.yyyy H:mm:ss");
-        int id = Integer.valueOf(parts[0]);
-        String title = parts[1];
-        int code = Integer.valueOf(parts[2]);
-        String producer = parts[3];
-        LocalDateTime dateOfLastUpdate = LocalDateTime.parse(parts[4], oldFormat);
+        int id = Integer.valueOf(line[0]);
+        String title = line[1];
+        int code = Integer.valueOf(line[2]);
+        String producer = line[3];
+        LocalDateTime dateOfLastUpdate = LocalDateTime.parse(line[4], oldFormat);
         Item item = new Item(id, title);
         item.setDateOfLastUpdate(dateOfLastUpdate);
         item.setCode(code);

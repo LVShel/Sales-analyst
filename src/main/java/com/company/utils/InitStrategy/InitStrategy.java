@@ -10,15 +10,13 @@ package com.company.utils.InitStrategy;
 public interface InitStrategy<T> {
     /**
      * Returns name of CSV file containing information about objects of analysis
-     * Keep in mind the relative file path will be retrieved
      * @return String value of CSV file name
      */
     String getFileName();
 
     /**
-     Returns an object of sales analysis initialized with values retrieved from one line of text file
+     Returns an object of sales analysis initialized with values retrieved while parsing a line of text file
      @return Object of sales analysis
-
      */
-    T parseLine(String[] parts);
+    T parseLine(String[] line);
 }
