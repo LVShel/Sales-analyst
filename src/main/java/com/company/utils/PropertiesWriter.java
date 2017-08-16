@@ -13,6 +13,7 @@ import java.util.Properties;
 public class PropertiesWriter {
     public static void write(){
         Properties properties = new Properties();
+
         try(OutputStream output = new FileOutputStream("src/config.properties")) {
             properties.setProperty("user", "root");
             properties.setProperty("password", "root");

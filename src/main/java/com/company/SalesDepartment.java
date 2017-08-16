@@ -26,18 +26,19 @@ public class SalesDepartment {
 
     public void initCustomers(){
         for(Object obj : initFromFile(new CustomerInitStrategy())){
-            customers.add((Customer)obj);
+            customers.add((Customer) obj);
         }
     }
 
     public void initItems(){
         for(Object obj : initFromFile(new ItemInitStrategy())){
-            items.add((Item)obj);
+            items.add((Item) obj);
         }
     }
 
     public <T> List<T> initFromFile(InitStrategy<T> strategy){
         List<T> list = new ArrayList<T>();
+
         try(CSVReader reader = new CSVReader(new FileReader(new File(strategy.getFileName())), ';', '"', 1)) {
             String[] parts;
             while ((parts = reader.readNext()) != null) {

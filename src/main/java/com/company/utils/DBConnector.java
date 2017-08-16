@@ -21,6 +21,7 @@ public class DBConnector {
     public DBConnector(){
         try{
             InputStream input =  new FileInputStream("src/config.properties");
+
             properties.load(input);
             connection = DriverManager.getConnection(URL, properties);
         }

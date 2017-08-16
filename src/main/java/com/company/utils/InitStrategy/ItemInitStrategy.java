@@ -36,6 +36,7 @@ public class ItemInitStrategy implements InitStrategy<Item> {
         String producer = line[3];
         LocalDateTime dateOfLastUpdate = LocalDateTime.parse(line[4], oldFormat);
         Item item = new Item(id, title);
+
         item.setDateOfLastUpdate(dateOfLastUpdate);
         item.setCode(code);
         item.setProducer(producer);

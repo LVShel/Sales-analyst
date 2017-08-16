@@ -78,6 +78,7 @@ public class DBAdministrator {
 
     public void insertCustomersToDB(List<Customer> customers){
         connection = connector.getConnection();
+
         try (PreparedStatement preparedStmt = connection.prepareStatement(INSERT_CUSTOMERS)) {
             connection.setAutoCommit(false);
             if (customers != null) {
@@ -108,17 +109,20 @@ public class DBAdministrator {
 
     public void insertSalesToDB(List<Customer> customers){
         connection = connector.getConnection();
+
         try (PreparedStatement preparedStmt = connection.prepareStatement(INSERT_SALES)) {
             connection.setAutoCommit(false);
             if (customers != null) {
-                for (Customer customer : customers) {
-                    for (Integer soldItem : customer.getLastPurchases()) {
+                for (Customer customer : customers){
+                    for (Integer soldItem : customer.getLastPurchases()){
                         preparedStmt.setInt(1, customer.getId());
                         preparedStmt.setInt(2, soldItem);
                         preparedStmt.execute();
                     }
                 }
-            } else connection.rollback();
+            } else {
+                connection.rollback();
+            }
             connection.commit();
 
         } catch (SQLException e) {
@@ -133,8 +137,9 @@ public class DBAdministrator {
         }
     }
 
-    public void insertItemsToDB(List<Item> items) {
+    public void insertItemsToDB(List<Item> items){
         connection = connector.getConnection();
+
         try (PreparedStatement preparedStmt = connection.prepareStatement(INSERT_ITEMS)) {
             connection.setAutoCommit(false);
             if (items != null) {
@@ -146,7 +151,9 @@ public class DBAdministrator {
                     preparedStmt.setTimestamp(5, Timestamp.valueOf(item.getDateOfLastUpdate()));
                     preparedStmt.execute();
                 }
-            } else connection.rollback();
+            } else {
+                connection.rollback();
+            }
             connection.commit();
 
         } catch (SQLException e) {
@@ -163,6 +170,7 @@ public class DBAdministrator {
 
     public void recreateAllTables(){
         connection = connector.getConnection();
+
         try(Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             statement.addBatch(DROP_SALES);
@@ -190,6 +198,7 @@ public class DBAdministrator {
         List<Item> items = null;
         connection = connector.getConnection();
         ResultSet rs;
+
         try {
             connection.setAutoCommit(false);
             switch (rank) {
@@ -221,6 +230,7 @@ public class DBAdministrator {
     public List<Item> getPopularItemsByCustomersGender(Gender gender, int limit) {
         List<Item> items;
         connection = connector.getConnection();
+
         try (PreparedStatement prepstmt = connection.prepareStatement(SELECT_POPULAR_ITEMS_BY_CUSTOMER_GENDER)) {
             connection.setAutoCommit(false);
             prepstmt.setString(1, gender.name());
@@ -240,6 +250,7 @@ public class DBAdministrator {
     public List<Item> getPopularItemsOfPeriod(LocalDate startDate, LocalDate endDate, int limit) {
         List<Item> items;
         connection = connector.getConnection();
+
         try (PreparedStatement prepstmt = connection.prepareStatement(SELECT_POPULAR_ITEMS_ON_PERIOD)) {
             connection.setAutoCommit(false);
             prepstmt.setDate(1, java.sql.Date.valueOf(startDate));
@@ -256,17 +267,18 @@ public class DBAdministrator {
         }
     }
 
-    public void markPopularItemsInDB(int limit) {
+    public void markPopularItemsInDB(int limit){
         connection = connector.getConnection();
+
         try (PreparedStatement primaryPrepstmt = connection.prepareStatement(UPDATE_PRIMARY_ITEMS)) {
             connection.setAutoCommit(false);
             List<Item> primaries = getItemsByRank(limit, ItemRank.POPULAR);
+
             for (Item item : primaries) {
                 primaryPrepstmt.setInt(1, item.getId());
                 primaryPrepstmt.executeUpdate();
             }
             connection.commit();
-
         } catch (SQLException e) {
             System.out.println("Problem in method markPopularItemsInDB()");
             e.printStackTrace();
@@ -279,11 +291,13 @@ public class DBAdministrator {
         }
     }
 
-    public void markUnpopularItemsInDB(int limit) {
+    public void markUnpopularItemsInDB(int limit){
         connection = connector.getConnection();
+
         try (PreparedStatement outsidersPrepstmt = connection.prepareStatement(UPDATE_CANDIDATES_TO_REMOVE)) {
             connection.setAutoCommit(false);
             List<Item> outsiders = getItemsByRank(limit, ItemRank.UNPOPULAR);
+
             for (Item item : outsiders) {
                 outsidersPrepstmt.setInt(1, item.getId());
                 outsidersPrepstmt.executeUpdate();
@@ -302,8 +316,9 @@ public class DBAdministrator {
         }
     }
 
-    public void writePopularItemsToFile(int limit) {
+    public void writePopularItemsToFile(int limit){
         connection = connector.getConnection();
+
         try (CSVWriter csvWriter = new CSVWriter(new FileWriter("src/Primary_Items.csv"), ';', CSVWriter.NO_QUOTE_CHARACTER);
              PreparedStatement stmt = connection.prepareStatement(SELECT_POPULAR_ITEMS_SET_LIMIT)) {
             stmt.setInt(1, limit);
@@ -314,8 +329,9 @@ public class DBAdministrator {
         }
     }
 
-    public void writeUnpopularItemsToFile(int limit) {
+    public void writeUnpopularItemsToFile(int limit){
         connection = connector.getConnection();
+
         try (CSVWriter csvWriter = new CSVWriter(new FileWriter("src/Candidates_To_Remove.csv"), ';', CSVWriter.NO_QUOTE_CHARACTER);
              PreparedStatement stmt = connection.prepareStatement(SELECT_UNPOPULAR_ITEMS_SET_LIMIT)) {
             stmt.setInt(1, limit);
@@ -328,9 +344,11 @@ public class DBAdministrator {
 
     public List<Item> setItemValues(ResultSet resultset){
         List<Item> items = new ArrayList<>();
+
         try{
             while (resultset.next()) {
                 Item item = new Item();
+
                 item.setId(resultset.getInt(1));
                 item.setTitle(resultset.getString(2));
                 item.setCode(resultset.getInt(3));
