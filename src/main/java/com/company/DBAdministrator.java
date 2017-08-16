@@ -4,7 +4,6 @@ import com.company.utils.DBConnector;
 import com.company.utils.Gender;
 import com.company.utils.ItemRank;
 import com.opencsv.CSVWriter;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
@@ -19,7 +18,7 @@ import java.util.List;
  * @author  Leonid Shelest
  */
 
-public class DBAdministrator {
+ class DBAdministrator {
     private DBConnector connector = new DBConnector();
 
     private Connection connection = null;
@@ -342,7 +341,7 @@ public class DBAdministrator {
         }
     }
 
-    public List<Item> setItemValues(ResultSet resultset){
+    private List<Item> setItemValues(ResultSet resultset){
         List<Item> items = new ArrayList<>();
 
         try{
